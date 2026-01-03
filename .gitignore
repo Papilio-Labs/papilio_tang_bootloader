@@ -1,0 +1,40 @@
+# .gitignore for Papilio RetroCade PlatformIO Project
+
+# PlatformIO
+.pio/
+.vscode/
+.clang_complete
+.gcc-flags.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Build artifacts
+*.o
+*.a
+*.bin
+*.elf
+*.map
+*.hex
+
+# FPGA build artifacts
+fpga/impl/
+fpga/temp/
+fpga/*.log
+fpga/*.rpt
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Credentials
+secrets.h
+credentials.h
+fpga/build_script.tcl

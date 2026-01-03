@@ -1,0 +1,27 @@
+//******************************************************************************
+// Pin Constraints for Papilio RetroCade - Simple GPIO Pass-through Example
+// FPGA: GW2A-LV18PG256C8/I7 (256-pin BGA package)
+//******************************************************************************
+
+// GPIO1 input from ESP32
+IO_LOC "gpio1_in" A9;
+IO_PORT "gpio1_in" PULL_MODE=UP IO_TYPE=LVCMOS33;
+
+// PMOD outputs (8 pins total)
+IO_LOC "pmod_out[0]" N9;
+IO_LOC "pmod_out[1]" R9;
+IO_LOC "pmod_out[2]" N8;
+IO_LOC "pmod_out[3]" L9;
+IO_LOC "pmod_out[4]" L8;
+IO_LOC "pmod_out[5]" M6;
+IO_LOC "pmod_out[6]" P7;
+IO_LOC "pmod_out[7]" R7;
+
+IO_PORT "pmod_out[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "pmod_out[1]" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "pmod_out[2]" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "pmod_out[3]" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "pmod_out[4]" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "pmod_out[5]" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "pmod_out[6]" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "pmod_out[7]" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
