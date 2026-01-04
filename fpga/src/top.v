@@ -55,8 +55,6 @@ module top (
 
 
     // WS2812B RGB LED controller
-    // Simple reset signal - could be tied to power-on reset or button
-//    reg rst_n = 1'b1;
     
     // Common colors (GRB format):
     // Red:     24'h00FF00
@@ -67,14 +65,29 @@ module top (
     // Magenta: 24'h00FFFF
     // White:   24'hFFFFFF
     // Purple:  24'h007F7F
-    // Orange:  24'h80FF00
+    // Orange:  24'h80FF00 (bright), 24'h081000 (dim)
     // Off:     24'h000000
     
-    ws2812b #(
-        .LED_COLOR(24'h000505)  // Purple color
-    ) u_ws2812b (
+    // Detect if CS pin has ever gone low (SPI activity detected)
+    reg cs_detected;
+    
+    always @(posedge clk_27mhz or negedge rst_n) begin
+        if (!rst_n) begin
+            cs_detected <= 1'b0;
+        end else if (esp_cs_n == 1'b0) begin
+            cs_detected <= 1'b1;  // Latch on first CS activity
+        end
+    end
+    
+    // Select color: show cyan when CS is active (low) OR has been detected, purple otherwise
+    // This makes it immediately responsive to CS activity
+    wire [23:0] led_color;
+    assign led_color = (esp_cs_n == 1'b0 || cs_detected) ? 24'h080008 : 24'h000505;  // Dim Cyan : Purple
+    
+    ws2812b u_ws2812b (
         .clk(clk_27mhz),
         .rst_n(rst_n),
+        .led_color_in(led_color),
         .dout(rgb_led)
     );
 

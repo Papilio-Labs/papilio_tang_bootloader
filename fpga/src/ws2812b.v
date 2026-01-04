@@ -1,6 +1,7 @@
 module ws2812b(
     input wire clk,           // Input clock (27MHz)
     input wire rst_n,         // Active low reset
+    input wire [23:0] led_color_in,  // Dynamic color input
     output reg dout          // Data output to WS2812B
 );
 
@@ -10,9 +11,6 @@ module ws2812b(
     parameter T1H = 19;      // 0.7us  (19 cycles @ 27MHz)
     parameter T1L = 16;      // 0.6us  (16 cycles @ 27MHz)
     parameter RES = 1350;    // >50us reset time (1350 cycles @ 27MHz)
-
-    // RGB Color (Green, Red, Blue order for WS2812B)
-    parameter [23:0] LED_COLOR = 24'h000505; // Format: GRB (default: dim purple)
 
     // State definitions
     reg [1:0] state;
@@ -32,13 +30,14 @@ module ws2812b(
             dout <= 0;
             bit_counter <= 0;
             cycle_counter <= 0;
-            led_data <= LED_COLOR;
+            led_data <= led_color_in;
         end else begin
             case (state)
                 IDLE: begin
                     dout <= 0;
                     bit_counter <= 23;  // Start with MSB
                     cycle_counter <= 0;
+                    led_data <= led_color_in;  // Latch new color
                     state <= SEND;
                 end
 
