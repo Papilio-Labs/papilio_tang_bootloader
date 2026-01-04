@@ -36,10 +36,7 @@ module top (
          .led(led)
      );
 
-    // Timed reconfiguration control: wait after writing completes before reconfig
-    // After esp_cs_n goes high (writing done), wait HOLD_SECS before triggering reconfig
-    // This gives time for the RGB LED to change from purple to cyan (needs ~80us per cycle)
-    // Using 1 second gives plenty of time to see the cyan color before restart
+    // Timed reconfiguration control: hold high for 5 seconds, then low
     timed_restart #(
         .CLOCK_MHZ(27),
         .HOLD_SECS(1)
@@ -73,18 +70,11 @@ module top (
     // Orange:  24'h80FF00
     // Off:     24'h000000
     
-    // Select color based on reconfig signal:
-    // reconfig=1 (bootloader active/writing) -> Purple
-    // reconfig=0 (writing complete, about to restart) -> Cyan
-    wire [23:0] led_color;
-    assign led_color = reconfig ? 24'h80FF00 : 24'hFF00FF;  // Purple : Cyan
-    
     ws2812b #(
-        .LED_COLOR(24'h000000)  // Placeholder - actual color comes from led_color input
+        .LED_COLOR(24'h000505)  // Purple color
     ) u_ws2812b (
         .clk(clk_27mhz),
         .rst_n(rst_n),
-        .led_color_in(led_color),
         .dout(rgb_led)
     );
 
